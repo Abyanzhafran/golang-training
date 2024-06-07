@@ -8,11 +8,13 @@ import (
 )
 
 func SetupRouter(r *gin.Engine) {
-	r.GET("/", handler.RootHandler)
+	publicApi := r.Group("/users")
+	publicApi.GET("/:id", handler.GetUser)
+	publicApi.GET("/", handler.GetAllUsers)
 
-	privateApi := r.Group("/private")
+	privateApi := r.Group("/users")
 	privateApi.Use(middleware.AuthMiddleware())
-	{
-		privateApi.POST("/post", handler.PostHandler)
-	}
+	privateApi.POST("/", handler.CreateUser)
+	privateApi.PUT("/:id", handler.UpdateUser)
+	privateApi.DELETE("/:id", handler.DeleteUser)
 }

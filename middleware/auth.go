@@ -8,15 +8,19 @@ import (
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.GetHeader("Authorization")
-
-		if token == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token required"})
+		username, password, ok := c.Request.BasicAuth()
+		if !ok {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization basic token required"})
 			c.Abort()
 			return
 		}
 
-		if token != "boys-token" {
+		const (
+			expectedUsername = "useradmin123"
+			expectedPassword = "useradmin123"
+		)
+		isValid := (username == expectedUsername) && (password == expectedPassword)
+		if !isValid {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authorization token"})
 			c.Abort()
 			return
