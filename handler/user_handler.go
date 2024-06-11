@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"example/hello/entity"
 	"net/http"
 	"strconv"
 	"time"
+
+	"example/hello/entity"
 
 	"github.com/gin-gonic/gin"
 )
@@ -106,4 +107,19 @@ func DeleteUser(c *gin.Context) {
 
 func GetAllUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
+}
+
+func GetHelloMessage() string {
+	return "Hellowww"
+}
+
+func PostHandler(c *gin.Context) {
+	var json struct {
+		Message string `json:"message"`
+	}
+	if err := c.ShouldBindJSON(&json); err == nil {
+		c.JSON(200, gin.H{"message": json.Message})
+	} else {
+		c.JSON(400, gin.H{"error": err.Error()})
+	}
 }
