@@ -24,14 +24,14 @@ func TestAuthMiddleware(t *testing.T) {
 	}{
 		{
 			name:           "Valid credentials",
-			username:       "user",
-			password:       "pass",
+			username:       "useradmin123",
+			password:       "useradmin123",
 			expectedStatus: http.StatusOK,
 			expectedBody:   "OK",
 		},
 		{
 			name:           "Invalid credentials",
-			username:       "user",
+			username:       "useradmin123",
 			password:       "wrongpass",
 			expectedStatus: http.StatusUnauthorized,
 			expectedBody:   `{"error":"Invalid authorization token"}`,
@@ -46,29 +46,24 @@ func TestAuthMiddleware(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			// Create a new gin router with the AuthMiddleware applied
+
 			router := gin.New()
 			router.Use(middleware.AuthMiddleware())
 			router.GET("/test", func(c *gin.Context) {
 				c.String(http.StatusOK, "OK")
 			})
 
-			// Create a new HTTP request
 			req, _ := http.NewRequest(http.MethodGet, "/test", nil)
 			if tt.username != "" || tt.password != "" {
 				req.SetBasicAuth(tt.username, tt.password)
 			}
 
-			// Create a response recorder to capture the response
 			w := httptest.NewRecorder()
 
-			// Perform the request
 			router.ServeHTTP(w, req)
 
-			// Assert the response status code
 			require.Equal(t, tt.expectedStatus, w.Code)
 
-			// Assert the response body based on the type of expected response
 			if tt.expectedStatus == http.StatusOK {
 				require.Equal(t, tt.expectedBody, w.Body.String())
 			} else {
