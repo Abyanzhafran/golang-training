@@ -1,25 +1,26 @@
 package service
 
 import (
+	"context"
 	"fmt"
 
 	"golang-advance/entity"
 )
 
 type IUserService interface {
-	CreateUser(user *entity.User) entity.User
-	GetUserByID(id int) (entity.User, error)
-	UpdateUser(id int, user entity.User) (entity.User, error)
-	DeleteUser(id int) error
-	GetAllUsers() []entity.User
+	CreateUser(ctx context.Context, user *entity.User) (entity.User, error)
+	GetUserByID(ctx context.Context, id int) (entity.User, error)
+	UpdateUser(ctx context.Context, id int, user entity.User) (entity.User, error)
+	DeleteUser(ctx context.Context, id int) error
+	GetAllUsers(ctx context.Context) ([]entity.User, error)
 }
 
 type IUserRepository interface {
-	CreateUser(user *entity.User) entity.User
-	GetUserByID(id int) (entity.User, bool)
-	UpdateUser(id int, user entity.User) (entity.User, bool)
-	DeleteUser(id int) bool
-	GetAllUsers() []entity.User
+	CreateUser(ctx context.Context, user *entity.User) (entity.User, error)
+	GetUserByID(ctx context.Context, id int) (entity.User, error)
+	UpdateUser(ctx context.Context, id int, user entity.User) (entity.User, error)
+	DeleteUser(ctx context.Context, id int) error
+	GetAllUsers(ctx context.Context) ([]entity.User, error)
 }
 
 type userService struct {
@@ -30,33 +31,42 @@ func NewUserService(userRepo IUserRepository) IUserService {
 	return &userService{userRepo: userRepo}
 }
 
-func (s *userService) CreateUser(user *entity.User) entity.User {
-	return s.userRepo.CreateUser(user)
+func (s *userService) GetAllUsers(ctx context.Context) ([]entity.User, error) {
+	users, err := s.userRepo.GetAllUsers(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed get all user: %v", err)
+	}
+	return users, nil
 }
 
-func (s *userService) GetUserByID(id int) (entity.User, error) {
-	user, found := s.userRepo.GetUserByID(id)
-	if !found {
-		return entity.User{}, fmt.Errorf("user not found")
+func (s *userService) CreateUser(ctx context.Context, user *entity.User) (entity.User, error) {
+	createdUser, err := s.userRepo.CreateUser(ctx, user)
+	if err != nil {
+		return entity.User{}, fmt.Errorf("failed create user: %v", err)
+	}
+	return createdUser, nil
+}
+
+func (s *userService) GetUserByID(ctx context.Context, id int) (entity.User, error) {
+	user, err := s.userRepo.GetUserByID(ctx, id)
+	if err != nil {
+		return entity.User{}, fmt.Errorf("id not found: %v", err)
 	}
 	return user, nil
 }
 
-func (s *userService) UpdateUser(id int, user entity.User) (entity.User, error) {
-	updatedUser, found := s.userRepo.UpdateUser(id, user)
-	if !found {
-		return entity.User{}, fmt.Errorf("user not found")
+func (s *userService) UpdateUser(ctx context.Context, id int, user entity.User) (entity.User, error) {
+	updatedUser, err := s.userRepo.UpdateUser(ctx, id, user)
+	if err != nil {
+		return entity.User{}, fmt.Errorf("failed update user: %v", err)
 	}
 	return updatedUser, nil
 }
 
-func (s *userService) DeleteUser(id int) error {
-	if !s.userRepo.DeleteUser(id) {
-		return fmt.Errorf("user not found")
+func (s *userService) DeleteUser(ctx context.Context, id int) error {
+	err := s.userRepo.DeleteUser(ctx, id)
+	if err != nil {
+		return fmt.Errorf("failed delete user: %v", err)
 	}
 	return nil
-}
-
-func (s *userService) GetAllUsers() []entity.User {
-	return s.userRepo.GetAllUsers()
 }
