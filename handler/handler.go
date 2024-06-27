@@ -26,6 +26,7 @@ func Handler(router *gin.Engine) {
 
 	submissionRepository := router.Group("/submissions")
 	submissionRepository.GET("", submissionUsecase.FindAll)
+	submissionRepository.GET("/:id", submissionUsecase.FindById)
 	submissionRepository.POST("", submissionUsecase.Create)
 	submissionRepository.DELETE("/:id", submissionUsecase.Delete)
 }

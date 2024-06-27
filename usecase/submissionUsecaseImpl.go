@@ -38,6 +38,28 @@ func (usecase *SubmissionUsecaseImpl) FindAll(ctx *gin.Context) {
 	})
 }
 
+func (usecase *SubmissionUsecaseImpl) FindById(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	// Converting the string parameter to int64
+	intParam, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		fmt.Println("Error converting string to int64:", err)
+		return
+	}
+
+	submission, err := usecase.SubmissionRepo.GetById(ctx, intParam)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status": false,
+			"error":  "User not found",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, submission)
+}
+
 func (usecase *SubmissionUsecaseImpl) Create(ctx *gin.Context) {
 	var submission entity.Submission
 
@@ -111,6 +133,6 @@ func (usecase *SubmissionUsecaseImpl) Delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": true,
 		"error":  "",
-		"data":   submission,		
+		"data":   submission,
 	})
 }
