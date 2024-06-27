@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserHandler(router *gin.Engine) {
+func Handler(router *gin.Engine) {
 	db := config.NewDB()
 
 	userRepo := repository.NewUserRepository(db)

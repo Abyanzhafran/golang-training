@@ -14,8 +14,7 @@ func main() {
 
 	router.Use(cors.Default())
 
-	// handler.ProductRouter(r)
-	handler.UserHandler(router)
+	handler.Handler(router)
 
 	if err := router.Run(); err != nil {
 		log.Fatalf("failed to start server: ")
