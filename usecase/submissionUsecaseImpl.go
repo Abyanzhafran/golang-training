@@ -1,7 +1,9 @@
 package usecase
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"golang-assignment/entity"
 	"golang-assignment/repository"
@@ -76,5 +78,39 @@ func (usecase *SubmissionUsecaseImpl) Create(ctx *gin.Context) {
 		"status": true,
 		"error":  "",
 		"data":   submission,
+	})
+}
+
+func (usecase *SubmissionUsecaseImpl) Delete(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	// Converting the string parameter to int64
+	intParam, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		fmt.Println("Error converting string to int64:", err)
+		return
+	}
+
+	submission, err := usecase.SubmissionRepo.GetById(ctx, intParam)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status": false,
+			"error":  "Submission not found",
+		})
+		return
+	}
+
+	if err := usecase.SubmissionRepo.Delete(ctx, intParam); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status": false,
+			"error":  "Internal Server Error",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"error":  "",
+		"data":   submission,		
 	})
 }

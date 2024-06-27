@@ -29,3 +29,17 @@ func (r *SubmissionRepositoryImpl) GetAll(ctx context.Context) ([]*entity.Submis
 
 	return submissions, nil
 }
+
+func (r *SubmissionRepositoryImpl) GetById(ctx context.Context, id int64) (*entity.Submission, error) {
+	var submission *entity.Submission
+	
+	if err := r.DB.Where("id = ?", id).First(&submission).Error; err != nil {
+		return nil, err
+	}
+
+	return submission, nil
+}
+
+func (r *SubmissionRepositoryImpl) Delete(ctx context.Context, id int64) error {
+	return r.DB.Where("id = ?", id).Delete(&entity.Submission{}).Error
+}
