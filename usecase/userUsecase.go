@@ -7,4 +7,5 @@ import (
 type UserUsecase interface {
 	Create(ctx *gin.Context)
 	FindAll(ctx *gin.Context)
+	FindById(ctx *gin.Context)
 }

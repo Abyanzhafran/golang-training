@@ -14,7 +14,14 @@ func Handler(router *gin.Engine) {
 	userRepo := repository.NewUserRepository(db)
 	userUsecase := usecase.NewUserUsecase(userRepo)
 
+	submissionRepo := repository.NewSubmissionRepository(db)
+	submissionUsecase := usecase.NewSubmissionUsecase(submissionRepo, userRepo)
+
 	userHandler := router.Group("/users")
 	userHandler.GET("", userUsecase.FindAll)
 	userHandler.POST("", userUsecase.Create)
+
+	submissionRepository := router.Group("/submissions")
+	submissionRepository.GET("", submissionUsecase.FindAll)
+	submissionRepository.POST("", submissionUsecase.Create)
 }
