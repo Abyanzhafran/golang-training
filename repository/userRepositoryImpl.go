@@ -39,3 +39,11 @@ func (r *UserRepositoryImpl) GetById(ctx context.Context, id int64) (*entity.Use
 
 	return user, nil
 }
+
+func (r *UserRepositoryImpl) Update(ctx context.Context, user *entity.User) error {
+	return r.DB.Model(&entity.User{}).Where("id = ?", user.ID).Updates(user).Error
+}
+
+func (r *UserRepositoryImpl) Delete(ctx context.Context, id int64) error {
+	return r.DB.Where("id = ?", id).Delete(&entity.User{}).Error
+}

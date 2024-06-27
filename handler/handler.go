@@ -19,7 +19,10 @@ func Handler(router *gin.Engine) {
 
 	userHandler := router.Group("/users")
 	userHandler.GET("", userUsecase.FindAll)
+	userHandler.GET("/:id", userUsecase.FindById)
 	userHandler.POST("", userUsecase.Create)
+	userHandler.PUT("/:id", userUsecase.Update)
+	userHandler.DELETE("/:id", userUsecase.Delete)
 
 	submissionRepository := router.Group("/submissions")
 	submissionRepository.GET("", submissionUsecase.FindAll)
