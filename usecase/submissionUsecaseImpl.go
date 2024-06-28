@@ -41,10 +41,10 @@ func (usecase *SubmissionUsecaseImpl) FindAll(ctx *gin.Context) {
 func (usecase *SubmissionUsecaseImpl) FindById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	// Converting the string parameter to int64
-	intParam, err := strconv.ParseInt(id, 10, 64)
+	// Converting the string parameter to int
+	intParam, err := strconv.Atoi(id)
 	if err != nil {
-		fmt.Println("Error converting string to int64:", err)
+		fmt.Println("Error converting string to int:", err)
 		return
 	}
 
@@ -106,8 +106,8 @@ func (usecase *SubmissionUsecaseImpl) Create(ctx *gin.Context) {
 func (usecase *SubmissionUsecaseImpl) Delete(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	// Converting the string parameter to int64
-	intParam, err := strconv.ParseInt(id, 10, 64)
+	// Converting the string parameter to int
+	intParam, err := strconv.Atoi(id)
 	if err != nil {
 		fmt.Println("Error converting string to int64:", err)
 		return

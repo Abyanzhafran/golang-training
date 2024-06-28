@@ -30,12 +30,12 @@ func (r *UserRepositoryImpl) GetAll(ctx context.Context) ([]*entity.User, error)
 	return users, nil
 }
 
-func (r *UserRepositoryImpl) GetById(ctx context.Context, id int64) (*entity.User, error) {
+func (r *UserRepositoryImpl) GetById(ctx context.Context, id int) (*entity.User, error) {
 	var user *entity.User
 
 	if err := r.DB.Where("id = ?", id).First(&user).Error; err != nil {
 		return nil, err
-	}	
+	}
 
 	return user, nil
 }
@@ -44,6 +44,6 @@ func (r *UserRepositoryImpl) Update(ctx context.Context, user *entity.User) erro
 	return r.DB.Model(&entity.User{}).Where("id = ?", user.ID).Updates(user).Error
 }
 
-func (r *UserRepositoryImpl) Delete(ctx context.Context, id int64) error {
+func (r *UserRepositoryImpl) Delete(ctx context.Context, id int) error {
 	return r.DB.Where("id = ?", id).Delete(&entity.User{}).Error
 }
