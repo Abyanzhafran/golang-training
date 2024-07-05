@@ -35,7 +35,7 @@ func NewDB() *gorm.DB {
 	// Set up auto-migration
 	log.Println("INFO: Running database migrations...")
 
-	if err := db.AutoMigrate(&entity.User{}, &entity.Submission{}); err != nil {
+	if err := db.AutoMigrate(&entity.User{}); err != nil {
 		log.Fatalf("ERROR: Failed to run migrations: %v", err)
 	}
 

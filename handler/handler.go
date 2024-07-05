@@ -14,19 +14,10 @@ func Handler(router *gin.Engine) {
 	userRepo := repository.NewUserRepository(db)
 	userUsecase := usecase.NewUserUsecase(userRepo)
 
-	submissionRepo := repository.NewSubmissionRepository(db)
-	submissionUsecase := usecase.NewSubmissionUsecase(submissionRepo, userRepo)
-
 	userHandler := router.Group("/users")
 	userHandler.GET("", userUsecase.FindAll)
 	userHandler.GET("/:id", userUsecase.FindById)
 	userHandler.POST("", userUsecase.Create)
 	userHandler.PUT("/:id", userUsecase.Update)
 	userHandler.DELETE("/:id", userUsecase.Delete)
-
-	submissionRepository := router.Group("/submissions")
-	submissionRepository.GET("", submissionUsecase.FindAll)
-	submissionRepository.GET("/:id", submissionUsecase.FindById)
-	submissionRepository.POST("", submissionUsecase.Create)
-	submissionRepository.DELETE("/:id", submissionUsecase.Delete)
 }
