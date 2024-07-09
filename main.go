@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"golang-assignment/handler"
+	handler "golang-assignment/handler/gin"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
