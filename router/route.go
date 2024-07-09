@@ -17,7 +17,7 @@ func SetupRouter(router *gin.Engine) {
 	userHandler := handler.NewUserHandler(userUsecase)
 
 	route := router.Group("/users")
-	route.GET("", userUsecase.FindAll)
+	route.GET("", userHandler.GetAllUsers)
 	route.GET("/:id", userUsecase.FindById)
 	route.POST("", userHandler.CreateUser)
 	route.PUT("/:id", userUsecase.Update)

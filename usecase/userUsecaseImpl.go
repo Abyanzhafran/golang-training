@@ -20,22 +20,12 @@ func NewUserUsecase(UserRepo repository.UserRepository) UserUsecase {
 	return &UserUsecaseImpl{UserRepo: UserRepo}
 }
 
-func (usecase *UserUsecaseImpl) FindAll(ctx *gin.Context) {
+func (usecase *UserUsecaseImpl) FindAll(ctx *gin.Context) ([]entity.User, error){
 	users, err := usecase.UserRepo.GetAll(ctx)
 	if err != nil {
-		// Handle the error and return an Internal Server Error response
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status": false,
-			"error":  "Internal Server Error",
-		})
-		return
+		return nil, fmt.Errorf("failed to fetch all users: %v", err)
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": true,
-		"error":  "",
-		"data":   users,
-	})
+	return users, nil
 }
 
 func (usecase *UserUsecaseImpl) FindById(ctx *gin.Context) {

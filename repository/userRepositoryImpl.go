@@ -25,8 +25,8 @@ func (r *UserRepositoryImpl) Create(ctx context.Context, user *entity.User) (ent
 	return *user, nil
 }
 
-func (r *UserRepositoryImpl) GetAll(ctx context.Context) ([]*entity.User, error) {
-	var users []*entity.User
+func (r *UserRepositoryImpl) GetAll(ctx context.Context) ([]entity.User, error) {
+	var users []entity.User
 
 	if err := r.DB.Find(&users).Error; err != nil {
 		return nil, err

@@ -35,6 +35,22 @@ func (handler *UserHandlerImpl) CreateUser(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusCreated, createdUser)
+}
 
-	return
+func (handler *UserHandlerImpl) GetAllUsers(ctx *gin.Context) {
+	users, err := handler.userUsecase.FindAll(ctx)
+	if err != nil {
+		// Handle the error and return an Internal Server Error response
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status": false,
+			"error":  "Internal Server Error",
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"error":  "",
+		"data":   users,
+	})
 }
