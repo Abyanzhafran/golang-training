@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"log"
 
 	"golang-assignment/entity"
 
@@ -16,8 +17,12 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return &UserRepositoryImpl{DB: db}
 }
 
-func (r *UserRepositoryImpl) Create(ctx context.Context, user *entity.User) error {
-	return r.DB.Create(user).Error
+func (r *UserRepositoryImpl) Create(ctx context.Context, user *entity.User) (entity.User, error) {
+	if err := r.DB.Create(user).Error; err != nil {
+		log.Printf("Error creating user: %v\n", err)
+		return entity.User{}, err
+	}
+	return *user, nil
 }
 
 func (r *UserRepositoryImpl) GetAll(ctx context.Context) ([]*entity.User, error) {

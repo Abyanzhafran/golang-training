@@ -16,7 +16,7 @@ func main() {
 
 	route.SetupRouter(ginRouter)
 
-	if err := ginRouter.Run(":3000"); err != nil {
+	if err := ginRouter.Run(":3001"); err != nil {
 		log.Fatalf("failed to start server: ")
 	}
 }
