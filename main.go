@@ -3,20 +3,20 @@ package main
 import (
 	"log"
 
-	handler "golang-assignment/handler/gin"
+	route "golang-assignment/router"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	router := gin.Default()
+	ginRouter := gin.Default()
 
-	router.Use(cors.Default())
+	ginRouter.Use(cors.Default())
 
-	handler.Handler(router)
+	route.SetupRouter(ginRouter)
 
-	if err := router.Run(); err != nil {
+	if err := ginRouter.Run(":3000"); err != nil {
 		log.Fatalf("failed to start server: ")
 	}
 }

@@ -1,23 +1,24 @@
 package handler
 
-import (
-	"golang-assignment/config"
-	"golang-assignment/repository"
-	"golang-assignment/usecase"
+// import (
+// 	"golang-assignment/usecase"
 
-	"github.com/gin-gonic/gin"
-)
+// 	"github.com/gin-gonic/gin"
+// )
 
-func Handler(router *gin.Engine) {
-	db := config.NewDB()
+// type IUserHandler interface {
+// 	CreateUser(c *gin.Context)
+// }
 
-	userRepo := repository.NewUserRepository(db)
-	userUsecase := usecase.NewUserUsecase(userRepo)
+// type UserHandler struct {
+// 	userService usecase.UserUsecase
+// }
 
-	userHandler := router.Group("/users")
-	userHandler.GET("", userUsecase.FindAll)
-	userHandler.GET("/:id", userUsecase.FindById)
-	userHandler.POST("", userUsecase.Create)
-	userHandler.PUT("/:id", userUsecase.Update)
-	userHandler.DELETE("/:id", userUsecase.Delete)
-}
+// func NewUserHandler(userUsecase usecase.UserUsecase) IUserHandler {
+// 	return &UserHandler{userService: userUsecase}
+// }
+
+// func (handler *UserHandler) CreateUser(c *gin.Context) {
+// 	var user entity.User
+
+// }
