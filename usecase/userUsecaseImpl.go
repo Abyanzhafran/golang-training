@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -59,30 +60,12 @@ func (usecase *UserUsecaseImpl) FindById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
-func (usecase *UserUsecaseImpl) Create(ctx *gin.Context) {
-	var user entity.User
-
-	if err := ctx.ShouldBindJSON(&user); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status": false,
-			"error":  err.Error(),
-		})
-		return
+func (usecase *UserUsecaseImpl) Create(ctx context.Context, user *entity.User) (entity.User, error) {
+	createdUser, err := usecase.UserRepo.Create(ctx, user)
+	if err != nil {
+		return entity.User{}, fmt.Errorf("gagal membuat pengguna: %v", err)
 	}
-
-	if err := usecase.UserRepo.Create(ctx, &user); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status": false,
-			"error":  err.Error(),
-		})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": true,
-		"error":  "",
-		"data":   user,
-	})
+	return createdUser, nil
 }
 
 func (usecase *UserUsecaseImpl) Update(ctx *gin.Context) {

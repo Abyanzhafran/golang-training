@@ -2,6 +2,7 @@ package route
 
 import (
 	"golang-assignment/config"
+	handler "golang-assignment/handler/gin"
 	"golang-assignment/repository"
 	"golang-assignment/usecase"
 
@@ -13,11 +14,12 @@ func SetupRouter(router *gin.Engine) {
 
 	userRepo := repository.NewUserRepository(db)
 	userUsecase := usecase.NewUserUsecase(userRepo)
+	userHandler := handler.NewUserHandler(userUsecase)
 
-	userHandler := router.Group("/users")
-	userHandler.GET("", userUsecase.FindAll)
-	userHandler.GET("/:id", userUsecase.FindById)
-	userHandler.POST("", userUsecase.Create)
-	userHandler.PUT("/:id", userUsecase.Update)
-	userHandler.DELETE("/:id", userUsecase.Delete)
+	route := router.Group("/users")
+	route.GET("", userUsecase.FindAll)
+	route.GET("/:id", userUsecase.FindById)
+	route.POST("", userHandler.CreateUser)
+	route.PUT("/:id", userUsecase.Update)
+	route.DELETE("/:id", userUsecase.Delete)
 }
