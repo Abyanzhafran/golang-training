@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"golang-assignment/entity"
 	"golang-assignment/usecase"
@@ -43,7 +44,7 @@ func (handler *UserHandlerImpl) GetAllUsers(ctx *gin.Context) {
 		// Handle the error and return an Internal Server Error response
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status": false,
-			"error":  "Internal Server Error",
+			"error":  err,
 		})
 		return
 	}
@@ -52,5 +53,34 @@ func (handler *UserHandlerImpl) GetAllUsers(ctx *gin.Context) {
 		"status": true,
 		"error":  "",
 		"data":   users,
+	})
+}
+
+func (handler *UserHandlerImpl) GetUser(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	intParam, err := strconv.Atoi(id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status": false,
+			"error":  err,
+		})
+		return
+	}
+
+	user, err := handler.userUsecase.FindById(ctx, intParam)
+	if err != nil {
+		// Handle the error and return an Internal Server Error response
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"status": false,
+			"error":  err,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"error":  "",
+		"data":   user,
 	})
 }

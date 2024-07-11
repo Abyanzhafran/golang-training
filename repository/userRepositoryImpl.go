@@ -35,11 +35,12 @@ func (r *UserRepositoryImpl) GetAll(ctx context.Context) ([]entity.User, error) 
 	return users, nil
 }
 
-func (r *UserRepositoryImpl) GetById(ctx context.Context, id int) (*entity.User, error) {
-	var user *entity.User
+func (r *UserRepositoryImpl) GetById(ctx context.Context, id int) (entity.User, error) {
+	var user entity.User
 
 	if err := r.DB.Where("id = ?", id).First(&user).Error; err != nil {
-		return nil, err
+		log.Printf("Error getting user by ID: %v\n", err)
+		return entity.User{}, err
 	}
 
 	return user, nil

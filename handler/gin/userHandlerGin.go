@@ -5,4 +5,5 @@ import "github.com/gin-gonic/gin"
 type UserHandler interface {
 	CreateUser(ctx *gin.Context)
 	GetAllUsers(ctx *gin.Context)
+	GetUser(ctx *gin.Context)
 }
